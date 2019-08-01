@@ -1,25 +1,17 @@
-//Finds the smallest value in an array
-def findSmallest(arr: Array[Int]): Int = {
-  //Stores the smallest value
-  var smallest = arr(0)
-  for(i <- 1 until arr.length){
-    if(arr(i) < smallest) {
-      smallest = arr(i)
+import scala.annotation.tailrec
+
+def selectionSort(nums: Seq[Int]): Seq[Int] = {
+  @tailrec
+  def recur(in: Seq[Int], out: Seq[Int]): Seq[Int] = {
+    if (in.isEmpty)
+      out
+    else {
+      val (element, index) = in.zipWithIndex.min
+      recur(in.slice(0, index) ++ in.slice(index + 1, in.length),
+        out :+ element)
     }
   }
-  return smallest
-}
 
-//Sort array
-def selectionSort(arr: Array[Int]): Array[Int] = {
-  val newArr = new Array[Int](arr.length)
-  for(i <- 0 until arr.length){
-    //Finds the smallest element in the array and adds it to the new array
-    val smallest = findSmallest(arr)
-    newArr(i) = smallest
-    //Sets current smallest value in array above largest value to avoid reusing values
-    arr(arr.indexOf(smallest)) = arr.max + 1
-  }
-  return newArr
+  recur(nums, Seq.empty[Int])
 }
 selectionSort(Array(5, 3, 6, 2, 10))
